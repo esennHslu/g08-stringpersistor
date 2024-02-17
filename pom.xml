@@ -769,7 +769,7 @@
     <repositories>
         <repository>
             <id>gitlab-maven-repo</id>
-            <url>https://gitlab.switch.ch/api/v4/projects/5632/packages/maven</url>
+            <url>https://gitlab.switch.ch/api/v4/projects/5590/packages/maven</url>
         </repository>
         <repository>
             <id>gitlab-maven-vsk-stringpersistor-api</id>

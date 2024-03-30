@@ -2,6 +2,7 @@ package ch.hslu.vsk.stringpersistor;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -42,11 +43,18 @@ public class FileStringPersistor implements StringPersistor {
 
         var persistedString = new PersistedString(timestamp, payload);
 
-        try (var bw = new BufferedWriter(new FileWriter(this.filePath.toString(), StandardCharsets.UTF_8, true))) {
-            bw.write(persistedString.getTimestamp().toString());
-            bw.write(": ");
-            bw.write(persistedString.getPayload());
-            bw.newLine();
+        try {
+            Path parentDir = filePath.getParent();
+            if (parentDir != null && !Files.exists(parentDir)) {
+                Files.createDirectories(parentDir);
+            }
+
+            try (var bw = new BufferedWriter(new FileWriter(this.filePath.toString(), StandardCharsets.UTF_8, true))) {
+                bw.write(persistedString.getTimestamp().toString());
+                bw.write(": ");
+                bw.write(persistedString.getPayload());
+                bw.newLine();
+            }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }

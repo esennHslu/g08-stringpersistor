@@ -41,6 +41,27 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
+    public void TestStringPersistorPathNotFound(@TempDir Path tempDir) {
+
+        // Arrange
+        var testMessage = "This is a test message , äöü ê] :) $";
+        var timeStamp = Instant.now();
+        Path file = tempDir.resolve("Logs").resolve("temp_log.txt");
+        var stringPersistor = new FileStringPersistor();
+
+        // Act
+        stringPersistor.setFile(file);
+        stringPersistor.save(timeStamp, testMessage);
+        var answer = stringPersistor.get(Integer.MAX_VALUE);
+
+        // Assert
+        assertEquals(answer.getFirst(),new PersistedString(timeStamp, testMessage));
+    }
+
+    /**
+     * TestCase for {@link FileStringPersistor}}.
+     */
+    @Test
     public void TestStringPersistorNoFileSetOnSave() {
 
         // Arrange

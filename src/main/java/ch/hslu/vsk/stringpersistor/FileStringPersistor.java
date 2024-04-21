@@ -41,7 +41,7 @@ public class FileStringPersistor implements StringPersistor {
             throw new IllegalStateException("StringPersistor file path not set");
         }
 
-        var persistedString = new PersistedString(timestamp, payload);
+        var persistedString = new PersistedString(timestamp, payload.replaceAll("\\r?\\n", " "));
 
         try {
             Path parentDir = filePath.getParent();
@@ -83,8 +83,8 @@ public class FileStringPersistor implements StringPersistor {
                 var values = nextLine.split(": ", 2);
                 readPersistedStings.add(new PersistedString(Instant.parse(values[0]), values[1]));
             }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
+        } catch (IOException ignore) {
+            return new ArrayList<>();
         }
 
         return readPersistedStings;

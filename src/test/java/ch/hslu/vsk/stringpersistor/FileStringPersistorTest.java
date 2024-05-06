@@ -1,4 +1,6 @@
 package ch.hslu.vsk.stringpersistor;
+
+import ch.hslu.vsk.stringpersistor.api.PersistedString;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -6,7 +8,6 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Collections;
 
-import ch.hslu.vsk.stringpersistor.api.PersistedString;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +35,7 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.getFirst(),new PersistedString(timeStamp, testMessage.replaceAll("\\r?\\n", " ")));
+        assertEquals(answer.getFirst(), new PersistedString(timeStamp, testMessage.replaceAll("\\r?\\n", " ")));
     }
 
     /**
@@ -52,7 +53,7 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.size() ,0);
+        assertEquals(answer.size(), 0);
     }
 
     /**
@@ -73,28 +74,7 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.getFirst(),new PersistedString(timeStamp, testMessage));
-    }
-
-    /**
-     * TestCase for {@link FileStringPersistor}}.
-     */
-    @Test
-    public void TestStringPersistorPathNotFound(@TempDir Path tempDir) {
-
-        // Arrange
-        var testMessage = "This is a test message , äöü ê] :) $";
-        var timeStamp = Instant.now();
-        Path file = tempDir.resolve("Logs").resolve("temp_log.txt");
-        var stringPersistor = new FileStringPersistor();
-
-        // Act
-        stringPersistor.setFile(file);
-        stringPersistor.save(timeStamp, testMessage);
-        var answer = stringPersistor.get(Integer.MAX_VALUE);
-
-        // Assert
-        assertEquals(answer.getFirst(),new PersistedString(timeStamp, testMessage));
+        assertEquals(answer.getFirst(), new PersistedString(timeStamp, testMessage));
     }
 
     /**

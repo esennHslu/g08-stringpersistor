@@ -15,19 +15,21 @@
  * limitations under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ch.hslu.vsk24fs.g08</groupId>
     <artifactId>g08-stringpersistor</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
 
     <name>g08-stringpersistor</name>
     <description>
         Implementation der stringpersistor-api für g08.
     </description>
-    <url>https://hslu.pages.switch.ch/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}</url>
+    <url>https://hslu.pages.switch.ch/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}
+    </url>
 
     <organization>
         <name>Hochschule Luzern - Informatik</name>
@@ -54,20 +56,30 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://${scm.developer.uid}@gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}.git</connection>
-        <developerConnection>scm:git:ssh://git@gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}.git</developerConnection>
-        <url>https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/tree/develop</url>
+        <connection>
+            scm:git:https://${scm.developer.uid}@gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}.git
+        </connection>
+        <developerConnection>
+            scm:git:ssh://git@gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}.git
+        </developerConnection>
+        <url>
+            https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/tree/develop
+        </url>
         <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
         <system>GitLab Repository - Switch</system>
-        <url>https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/-/issues</url>
+        <url>
+            https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/-/issues
+        </url>
     </issueManagement>
 
     <ciManagement>
         <system>CI auf GitLab - Switch</system>
-        <url>https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/-/pipelines</url>
+        <url>
+            https://gitlab.switch.ch/hslu/edu/bachelor-computer-science/vsk/${scm.group.name}/g08/${project.artifactId}/-/pipelines
+        </url>
     </ciManagement>
 
     <properties>
@@ -181,7 +193,7 @@
                 <artifactId>mockito-core</artifactId>
                 <version>5.10.0</version>
                 <scope>test</scope>
-            </dependency>        
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -221,7 +233,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-        </dependency>        
+        </dependency>
     </dependencies>
 
     <build>
@@ -559,9 +571,9 @@
                             <backend>pdf</backend>
                             <attributes>
                                 <icons>font</icons>
-                                <pagenums />
-                                <toc />
-                                <idprefix />
+                                <pagenums/>
+                                <toc/>
+                                <idprefix/>
                                 <idseparator>-</idseparator>
                             </attributes>
                         </configuration>
@@ -716,7 +728,7 @@
                             <report>aggregate</report>
                         </reports>
                     </reportSet>
-                </reportSets>            
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -790,5 +802,5 @@
             <id>gitlab-site</id>
             <url>https://hslu.pages.switch.ch/edu/bachelor-computer-science/vsk/24fs01/g08/g08-stringpersistor/</url>
         </site>
-	</distributionManagement>
+    </distributionManagement>
 </project>

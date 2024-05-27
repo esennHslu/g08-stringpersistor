@@ -21,11 +21,11 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistor(@TempDir Path tempDir) {
+    public void testStringPersistor(@TempDir Path tempDir) {
 
         // Arrange
         var testMessage = "This is a test message , äöü ê] \n :) $";
-        var timeStamp = Instant.now();
+        var timeStamp = Instant.parse("2024-05-01T10:10:00.00Z");
         Path file = tempDir.resolve("temp_log.txt");
         var stringPersistor = new FileStringPersistor();
 
@@ -35,14 +35,14 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.getFirst(), new PersistedString(timeStamp, testMessage.replaceAll("\\r?\\n", " ")));
+        assertEquals(new PersistedString(timeStamp, testMessage.replaceAll("\\r?\\n", " ")), answer.getFirst());
     }
 
     /**
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistorGetWithoutFirstSaving(@TempDir Path tempDir) {
+    public void testStringPersistorGetWithoutFirstSaving(@TempDir Path tempDir) {
 
         // Arrange
         Path file = tempDir.resolve("temp_log.txt");
@@ -53,18 +53,18 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.size(), 0);
+        assertEquals(0, answer.size());
     }
 
     /**
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistorPathNotFound(@TempDir Path tempDir) {
+    public void testStringPersistorPathNotFound(@TempDir Path tempDir) {
 
         // Arrange
         var testMessage = "This is a test message , äöü ê] :) $";
-        var timeStamp = Instant.now();
+        var timeStamp = Instant.parse("2024-05-01T10:10:00.00Z");
         Path file = tempDir.resolve("Logs").resolve("temp_log.txt");
         var stringPersistor = new FileStringPersistor();
 
@@ -74,18 +74,18 @@ final class FileStringPersistorTest {
         var answer = stringPersistor.get(Integer.MAX_VALUE);
 
         // Assert
-        assertEquals(answer.getFirst(), new PersistedString(timeStamp, testMessage));
+        assertEquals(new PersistedString(timeStamp, testMessage), answer.getFirst());
     }
 
     /**
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistorNoFileSetOnSave() {
+    public void testStringPersistorNoFileSetOnSave() {
 
         // Arrange
         var testMessage = "Foo";
-        var timeStamp = Instant.now();
+        var timeStamp = Instant.parse("2024-05-01T10:10:00.00Z");
         var stringPersistor = new FileStringPersistor();
 
         // Act & Assert
@@ -96,7 +96,7 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistorNoFileSetOnGet() {
+    public void testStringPersistorNoFileSetOnGet() {
 
         // Arrange
         var stringPersistor = new FileStringPersistor();
@@ -109,7 +109,7 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistor_1100Entries(@TempDir Path tempDir) {
+    public void testStringPersistor_1100Entries(@TempDir Path tempDir) {
 
         // Arrange
         var stringPersistor = new FileStringPersistor();
@@ -117,7 +117,7 @@ final class FileStringPersistorTest {
 
         stringPersistor.setFile(file);
         for (int i = 0; i < 1100; i++) {
-            stringPersistor.save(Instant.now(), "Test message nr" + i);
+            stringPersistor.save(Instant.parse("2024-05-01T10:10:00.00Z"), "Test message nr" + i);
         }
 
         // Act
@@ -131,7 +131,7 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistor_ReadLessThanAvailableEntries(@TempDir Path tempDir) {
+    public void testStringPersistor_ReadLessThanAvailableEntries(@TempDir Path tempDir) {
 
         // Arrange
         var stringPersistor = new FileStringPersistor();
@@ -139,7 +139,7 @@ final class FileStringPersistorTest {
 
         stringPersistor.setFile(file);
         for (int i = 0; i < 4; i++) {
-            stringPersistor.save(Instant.now(), "Test message nr" + i);
+            stringPersistor.save(Instant.parse("2024-05-01T10:10:00.00Z"), "Test message nr" + i);
         }
 
         // Act
@@ -153,7 +153,7 @@ final class FileStringPersistorTest {
      * TestCase for {@link FileStringPersistor}}.
      */
     @Test
-    public void TestStringPersistor_Read100EntriesInLessThan200ms(@TempDir Path tempDir) {
+    public void testStringPersistor_Read100EntriesInLessThan200ms(@TempDir Path tempDir) {
 
         // Arrange
         var stringPersistor = new FileStringPersistor();
@@ -162,7 +162,7 @@ final class FileStringPersistorTest {
         stringPersistor.setFile(file);
         String message = String.join("", Collections.nCopies(1100, "X"));
         for (int i = 0; i < 100; i++) {
-            stringPersistor.save(Instant.now(), message);
+            stringPersistor.save(Instant.parse("2024-05-01T10:10:00.00Z"), message);
         }
 
         // Act

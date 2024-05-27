@@ -1,21 +1,24 @@
 package ch.hslu.vsk.stringpersistor;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import ch.hslu.vsk.stringpersistor.api.PersistedString;
+import ch.hslu.vsk.stringpersistor.api.StringPersistor;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import ch.hslu.vsk.stringpersistor.api.StringPersistor;
-import ch.hslu.vsk.stringpersistor.api.PersistedString;
+import static java.nio.file.StandardOpenOption.*;
 
 /**
  * Persists messages to files.
  */
 public class FileStringPersistor implements StringPersistor {
 
+    private static final String DELIMITER = ": ";
     private Path filePath;
 
     /**
@@ -41,7 +44,7 @@ public class FileStringPersistor implements StringPersistor {
             throw new IllegalStateException("StringPersistor file path not set");
         }
 
-        var persistedString = new PersistedString(timestamp, payload.replaceAll("\\r?\\n", " "));
+        String inlinedPayload = payload.replace("\r\n", " ").replace("\n", " ");
 
         try {
             Path parentDir = filePath.getParent();
@@ -49,12 +52,7 @@ public class FileStringPersistor implements StringPersistor {
                 Files.createDirectories(parentDir);
             }
 
-            try (var bw = new BufferedWriter(new FileWriter(this.filePath.toString(), StandardCharsets.UTF_8, true))) {
-                bw.write(persistedString.getTimestamp().toString());
-                bw.write(": ");
-                bw.write(persistedString.getPayload());
-                bw.newLine();
-            }
+            Files.write(filePath, buildByteString(timestamp, inlinedPayload), CREATE, WRITE, APPEND);
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -68,25 +66,42 @@ public class FileStringPersistor implements StringPersistor {
      */
     @Override
     public synchronized List<PersistedString> get(final int count) {
-
         if (filePath == null) {
             throw new IllegalStateException("StringPersistor file path not set");
         }
 
-        var readPersistedStings = new ArrayList<PersistedString>();
-
-        try (var reader = new BufferedReader(new FileReader(this.filePath.toString(), StandardCharsets.UTF_8))) {
-            String nextLine;
-            var counter = 1;
-            while ((nextLine = reader.readLine()) != null && counter <= count) {
-                counter++;
-                var values = nextLine.split(": ", 2);
-                readPersistedStings.add(new PersistedString(Instant.parse(values[0]), values[1]));
-            }
-        } catch (IOException ignore) {
-            return new ArrayList<>();
+        if (!Files.exists(filePath)) {
+            return Collections.emptyList();
         }
 
-        return readPersistedStings;
+        List<PersistedString> readPersistedStrings;
+
+        try {
+            List<String> lines = Files.readAllLines(filePath);
+            readPersistedStrings = convertToPersistedStringList(lines, count);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Couldn't read file: " + filePath, e);
+        }
+
+        return readPersistedStrings;
+    }
+
+    private byte[] buildByteString(final Instant timestamp, final String payload) {
+        var formattedTime = InstantHelper.format(timestamp);
+        return (formattedTime + DELIMITER + payload + System.lineSeparator()).getBytes();
+    }
+
+    private List<PersistedString> convertToPersistedStringList(final List<String> lines, final int amount) {
+        return lines.stream()
+                .limit(amount)
+                .map(this::extractPersistedString)
+                .toList();
+    }
+
+    private PersistedString extractPersistedString(final String fileLine) {
+        String[] temp = fileLine.split(DELIMITER, 2);
+        Instant timestamp = InstantHelper.parse(temp[0]);
+        String payload = temp[1];
+        return new PersistedString(timestamp, payload);
     }
 }
